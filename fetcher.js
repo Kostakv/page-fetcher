@@ -17,6 +17,8 @@ const conn = net.createConnection({
   host: `${URL}`,
   port: 80
 });
+
+
 conn.setEncoding('UTF8');
 
 conn.on('connect', () => {
@@ -28,12 +30,25 @@ conn.on('connect', () => {
 });
 
 conn.on('data', (data) => {
-  console.log(data);
   fs.writeFile(`${PATH}`, data, (err) => {
     if (err)
       console.log(err);
+      else {
+        fs.stat("./index.html", (err, fileStats) => {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log(`Downloaded and saved ${fileStats.size} to ./${PATH}`)
+          }
+        })
+      }
   })
+  
   conn.end();
 });
+
+
+
+
 
 
